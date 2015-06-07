@@ -1,7 +1,7 @@
 services:
   student_service:
       class:  AppBundle\Services\StudentService
-      arguments: [ "@=service('doctrine').getManager().getRepository('AppBundle:Student')" ]
+      arguments: [ @doctrine.orm.entity_manager ]
   student_path_command:
       class: AppBundle\Command\StudentPathCommand
       arguments: [ @student_service ]

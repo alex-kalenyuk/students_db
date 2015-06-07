@@ -1,21 +1,49 @@
 <?php
 
-
 namespace AppBundle\Services;
 
-use AppBundle\Repository\StudentRepository;
+use Doctrine\ORM\EntityManager;
 
 class StudentService
 {
-    private $studentRepository;
+    const BATCH_SIZE = 20;
 
-    public function __construct(StudentRepository $studentRepository)
+    private $entityManager;
+    private $paths = [];
+
+    public function __construct(EntityManager $entityManager)
     {
-        $this->studentRepository = $studentRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function generatePaths()
     {
-        return $this->studentRepository->generatePaths();
+        $i = 0;
+        $q = $this->entityManager->createQuery("select s from AppBundle\Entity\Student s");
+        foreach ($q->iterate() as $row) {
+            $student = $row[0];
+            $student->setPath($this->getUniquePath($student->getName()));
+            if (($i % self::BATCH_SIZE) === 0) {
+                $this->entityManager->flush(); // Executes all updates.
+                $this->entityManager->clear(); // Detaches all objects from Doctrine!
+            }
+            ++$i;
+        }
+        $this->entityManager->flush();
+    }
+
+    public function getUniquePath($name)
+    {
+        $path = strtolower(str_replace(" ", "_", $name));
+
+        if (!in_array($path, $this->paths)) {
+            $this->paths[] = $path;
+            return $path;
+        }
+
+        $similarPaths = preg_grep("/^(" . $path . ")+/", $this->paths);
+        $uniquePath = $path . "_" . count($similarPaths);
+        $this->paths[] = $uniquePath;
+        return $uniquePath;
     }
 }
