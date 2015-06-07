@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/alex-kalenyuk/jam_storage.svg?branch=master)](https://travis-ci.org/alex-kalenyuk/jam_storage)
+[![Build Status](https://travis-ci.org/alex-kalenyuk/students_db.svg?branch=master)](https://travis-ci.org/alex-kalenyuk/students_db)
 
 students_db
 ===========
