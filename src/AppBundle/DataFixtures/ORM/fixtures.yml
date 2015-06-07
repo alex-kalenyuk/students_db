@@ -1,0 +1,3 @@
+AppBundle\Entity\JamYear:
+        jamYear{1..5}:
+                year: <numberBetween($min = 2000, $max = 2015)>
