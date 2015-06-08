@@ -15,11 +15,11 @@ class StudentsController extends Controller
 {
     /**
      * @param Student $student
-     * @return array
      *
      * @Route("/students/detail/{path}", name="detail")
      * @Cache(maxage="900", expires="15 minutes", public=true)
-     * @Template()
+     * @Template
+     * @return array
      */
     public function detailAction(Student $student)
     {
