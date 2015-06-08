@@ -18,11 +18,11 @@ class StudentsController extends Controller
      * @param Student $student
      * @Route("/detail/{path}", name="detail")
      * @Cache(maxage="900", expires="15 minutes", public=true)
-     * @Template("AppBundle:Students:detail.html.twig", vars={"student"})
+     * @Template()
      * @return array
      */
     public function detailAction(Student $student)
     {
-
+        return ['student' => $student];
     }
 }
