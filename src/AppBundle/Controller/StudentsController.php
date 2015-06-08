@@ -10,16 +10,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Class StudentsController
- * @Route("/students")
  */
 class StudentsController extends Controller
 {
     /**
      * @param Student $student
-     * @Route("/detail/{path}", name="detail")
+     * @return array
+     *
+     * @Route("/students/detail/{path}", name="detail")
      * @Cache(maxage="900", expires="15 minutes", public=true)
      * @Template()
-     * @return array
      */
     public function detailAction(Student $student)
     {
