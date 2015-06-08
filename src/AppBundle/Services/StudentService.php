@@ -36,14 +36,12 @@ class StudentService
     {
         $path = strtolower(str_replace(" ", "_", $name));
 
-        if (!in_array($path, $this->paths)) {
-            $this->paths[] = $path;
+        if (!array_key_exists($path, $this->paths)) {
+            $this->paths[$path] = 1;
             return $path;
         }
 
-        $similarPaths = preg_grep("/^(" . $path . ")+/", $this->paths);
-        $uniquePath = $path . "_" . count($similarPaths);
-        $this->paths[] = $uniquePath;
-        return $uniquePath;
+        $this->paths[$path]++;
+        return $path . "_" . $this->paths[$path];
     }
 }
