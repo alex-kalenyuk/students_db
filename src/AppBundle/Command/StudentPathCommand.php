@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StudentPathCommand extends ContainerAwareCommand
 {
+    const ONE_MB_IN_BYTES = 1048576;
     const PRECISION = 3;
 
     protected $studentService;
