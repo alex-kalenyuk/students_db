@@ -23,13 +23,16 @@ class StudentService
     public function generatePaths()
     {
         $i = 0;
+        // todo: it's better to move query to repository class
         $q = $this->entityManager->createQuery("select s from AppBundle\Entity\Student s");
         foreach ($q->iterate() as $row) {
+            // todo: add /** @var Type */
             $student = $row[0];
             $student->setPath($this->getUniquePath($student->getName()));
             if (($i % self::BATCH_SIZE) === 0) {
                 $this->entityManager->flush(); // Executes all updates.
                 $this->entityManager->clear(); // Detaches all objects from Doctrine!
+                //todo: call garbage collector
             }
             ++$i;
         }
@@ -44,6 +47,7 @@ class StudentService
      */
     public function getUniquePath($name)
     {
+        // todo: not safe, sanitize not only spaces but all other incorrect symbols
         $path = strtolower(str_replace(" ", self::PATH_SEPARATOR, $name));
 
         if (!array_key_exists($path, $this->paths)) {

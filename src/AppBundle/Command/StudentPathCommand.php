@@ -33,6 +33,7 @@ class StudentPathCommand extends ContainerAwareCommand
         $this->studentService->generatePaths();
         $endTime = microtime(true);
 
+        // todo: it's better to use constants here
         $output->writeln("Time elapsed: " . round($endTime - $startTime, 3) . " s");
         $output->writeln("Memory usage: " . round(memory_get_usage()/1048576, 3) . " Mb");
     }
