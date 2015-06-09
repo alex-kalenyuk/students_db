@@ -10,6 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StudentPathCommand extends ContainerAwareCommand
 {
+    const PRECISION = 3;
+
     protected $studentService;
 
     public function __construct(StudentService $studentService)
@@ -34,7 +36,10 @@ class StudentPathCommand extends ContainerAwareCommand
         $endTime = microtime(true);
 
         // todo: it's better to use constants here
-        $output->writeln("Time elapsed: " . round($endTime - $startTime, 3) . " s");
-        $output->writeln("Memory usage: " . round(memory_get_usage()/1048576, 3) . " Mb");
+        $output->writeln("Time elapsed: " . round($endTime - $startTime, self::PRECISION) . " s");
+        $output->writeln(
+            "Memory usage: " .
+            round(memory_get_usage() / self::ONE_MB_IN_BYTES, self::PRECISION) . " Mb"
+        );
     }
 }

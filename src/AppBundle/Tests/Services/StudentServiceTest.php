@@ -29,13 +29,22 @@ class StudentServiceTest extends \PHPUnit_Framework_TestCase
             ->method('iterate')
             ->will($this->returnValue([[$student], [$student]]));
 
+        $studentRep = $this
+            ->getMockBuilder('\AppBundle\Repository\StudentRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $studentRep->expects($this->once())
+            ->method('queryAll')
+            ->will($this->returnValue($iterator));
+
         $entityManager = $this
             ->getMockBuilder('\Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
         $entityManager->expects($this->once())
-            ->method('createQuery')
-            ->will($this->returnValue($iterator));
+            ->method('getRepository')
+            ->with($this->equalTo('AppBundle:Student'))
+            ->will($this->returnValue($studentRep));
         $entityManager->expects($this->any())
             ->method('flush');
 
@@ -57,7 +66,6 @@ class StudentServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $service = new StudentService($entityManager);
 
-        // todo: use @dataprovider to check different input values
         $this->assertEquals(
             'firstname_lastname',
             $service->getUniquePath('FirstName LastName')

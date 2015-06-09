@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\Student;
 use Doctrine\ORM\EntityManager;
 
 class StudentService
@@ -23,16 +24,15 @@ class StudentService
     public function generatePaths()
     {
         $i = 0;
-        // todo: it's better to move query to repository class
-        $q = $this->entityManager->createQuery("select s from AppBundle\Entity\Student s");
+        $q = $this->entityManager->getRepository('AppBundle:Student')->queryAll();
         foreach ($q->iterate() as $row) {
-            // todo: add /** @var Type */
+            /** @var Student */
             $student = $row[0];
             $student->setPath($this->getUniquePath($student->getName()));
             if (($i % self::BATCH_SIZE) === 0) {
                 $this->entityManager->flush(); // Executes all updates.
                 $this->entityManager->clear(); // Detaches all objects from Doctrine!
-                //todo: call garbage collector
+                gc_collect_cycles();
             }
             ++$i;
         }
@@ -47,8 +47,7 @@ class StudentService
      */
     public function getUniquePath($name)
     {
-        // todo: not safe, sanitize not only spaces but all other incorrect symbols
-        $path = strtolower(str_replace(" ", self::PATH_SEPARATOR, $name));
+        $path = $this->slugify($name);
 
         if (!array_key_exists($path, $this->paths)) {
             $this->paths[$path] = 1;
@@ -58,5 +57,19 @@ class StudentService
         $uniquePath = $path . self::PATH_SEPARATOR . $this->paths[$path];
         $this->paths[$path]++;
         return $uniquePath;
+    }
+
+    /**
+     * Transform (e.g. "Hello World") into a slug (e.g. "hello-world")
+     * @param string $string
+     * @return string
+     */
+    public function slugify($string)
+    {
+        return preg_replace(
+            '/[^a-z0-9]/',
+            self::PATH_SEPARATOR,
+            strtolower(trim(strip_tags($string)))
+        );
     }
 }
