@@ -66,13 +66,20 @@ class StudentServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $service = new StudentService($entityManager);
 
-        $this->assertEquals(
-            'firstname_lastname',
-            $service->getUniquePath('FirstName LastName')
-        );
-        $this->assertEquals(
-            'firstname_lastname_1',
-            $service->getUniquePath('FirstName LastName')
-        );
+        foreach ($this->pathProvider() as list($name, $expectedPath)) {
+            $this->assertEquals(
+                $expectedPath,
+                $service->getUniquePath($name)
+            );
+        }
+    }
+
+    public function pathProvider()
+    {
+        return [
+            ['FirstName LastName', 'firstname_lastname'],
+            ['FirstName LastName', 'firstname_lastname_1'],
+            ['FirstName LastName', 'firstname_lastname_2']
+        ];
     }
 }

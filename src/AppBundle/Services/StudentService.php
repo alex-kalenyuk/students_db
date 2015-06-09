@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 
 class StudentService
 {
-    const BATCH_SIZE = 20;
+    const BATCH_SIZE = 50;
     const PATH_SEPARATOR = '_';
 
     private $entityManager;
