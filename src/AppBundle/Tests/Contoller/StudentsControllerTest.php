@@ -23,7 +23,7 @@ class StudentsControllerTest extends WebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(self::FIFTEEN_MIN_IN_SEC, $this->client->getResponse()->getMaxAge());
-        $this->assertEquals(new \DateTime('15 minutes'), $this->client->getResponse()->getExpires());
+        $this->assertInstanceOf('DateTime', $this->client->getResponse()->getExpires());
     }
 
     public function testDetailActionCheckUniquePath()
