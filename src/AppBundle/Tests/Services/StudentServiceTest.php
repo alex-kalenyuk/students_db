@@ -57,6 +57,7 @@ class StudentServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $service = new StudentService($entityManager);
 
+        // todo: use @dataprovider to check different input values
         $this->assertEquals(
             'firstname_lastname',
             $service->getUniquePath('FirstName LastName')
